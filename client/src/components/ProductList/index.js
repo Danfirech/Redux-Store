@@ -13,10 +13,14 @@ function ProductList() {
 
   const { currentCategory } = state;
 
-  const { loading, data } = useQuery(QUERY_PRODUCTS);
+  const { loading, data, error } = useQuery(QUERY_PRODUCTS);
+  if (error) {
+    console.log(JSON.stringify(error));
+  }
 
   useEffect(() => {
     if (data) {
+      console.log("this works");
       dispatch({
         type: UPDATE_PRODUCTS,
         products: data.products,
@@ -25,6 +29,7 @@ function ProductList() {
         idbPromise("products", "put", product);
       });
     } else if (!loading) {
+      console.log("still loading");
       idbPromise("products", "get").then((products) => {
         dispatch({
           type: UPDATE_PRODUCTS,
